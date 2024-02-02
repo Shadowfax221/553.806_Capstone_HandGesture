@@ -10,7 +10,7 @@ dataset source: https://github.com/hukenovs/hagrid
 ## Week 2
 - [x] label matching and selection
 - [x] reduce dataset size
-- [ ] image resize and gray-scaling 
+- [x] image resize and gray-scaling 
 
 ### label matching and selection
 
