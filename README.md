@@ -33,8 +33,8 @@ mapping each gesture to emoji:
 | peace       | ✌             | `:victory_hand:`          | U+270C      |         |
 | ~~peace inv.~~  | 🤘       | `:sign_of_the_horns:`     | U+1F918     | weak emoji     |
 | rock        | 🤘            | `:sign_of_the_horns:`     | U+1F918     |         |
-| stop        | ✋            | `:raised_hand:`           | U+270B      |         |
-| stop inv.   | 🤚            | `:raised_back_of_hand:`   | U+1F91A     |         |
+| stop        | ✋            | `:raised_hand:`           | U+270B      | similar to stop inv.        |
+| stop inv.   | 🤚            | `:raised_back_of_hand:`   | U+1F91A     | similar to stop        |
 | ~~three~~   | 🤟            | `:love-you_gesture:`      | U+1F91F     | weak emoji        |
 | ~~three 2~~ |             |      |     | no such emoji        |
 | ~~two up~~  | ✌             | `:victory_hand:`          | U+270C      | weak emoji        |
