@@ -5,9 +5,11 @@ timeline: https://docs.google.com/spreadsheets/d/1NNpIA2gp-X00Ras_H9GhWfCc83riU-
 ## Week 1
 - [x] Dataset selection
 
+dataset source: https://github.com/hukenovs/hagrid
+
 ## Week 2
 - [x] label matching and selection
-- [ ] reduce dataset size
+- [x] reduce dataset size
 - [ ] image resize and gray-scaling 
 
 ### label matching and selection
@@ -42,4 +44,4 @@ mapping each gesture to emoji:
 
 ### reduce dataset size
 
-The original dataset has 5000 to 30000+ pictures for each class. Reduce each to 10 for testing on resizing and gray-scaling. Reduced dataset is in \dataset. 
+The original dataset has 5000 to 30000+ pictures for each class. Reduce each to 100 for testing on resizing and gray-scaling. Reduced dataset is in \dataset. 
