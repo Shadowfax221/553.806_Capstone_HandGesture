@@ -6,7 +6,37 @@ timeline: https://docs.google.com/spreadsheets/d/1NNpIA2gp-X00Ras_H9GhWfCc83riU-
 - [x] Dataset selection
 
 ## Week 2
-- [ ] label matching and selection
+- [x] label matching and selection
 - [ ] reduce dataset size
 - [ ] image resize and gray-scaling 
+
+### label matching and selection
+
+18 classes of gesture of gestures in dataset: 
+
+![gestures](https://github.com/hukenovs/hagrid/raw/master/images/gestures.jpg)
+
+mapping each gesture to emoji: 
+* ref to https://unicode.org/emoji/charts/full-emoji-list.html
+
+| dataset     | emoji         | shortcode                 | Unicode     | comment |
+|-------------|---------------|---------------------------|-------------|---------|
+| call        | 🤙            | `:call_me_hand:`          | U+1F919     |         |
+| dislike     | 👎            | `:thumbs_down:`           | U+1F44E     |         |
+| fist        | ✊            | `:raised_fist:`           | U+270A      |         |
+| ~~four~~    | 🖖            | `:vulcan_salute:`         | U+1F596     | weak emoji        |
+| like        | 👍            | `:thumbs_up:`             | U+1F44D     |         |
+| mute        | 🤐            | `:zipper_mouth_face:`     | U+1F910     | uncommon |
+| ok          | 👌            | `:ok_hand:`               | U+1F44C     |         |
+| one         | ☝             | `:index_pointing_up:`     | U+261D      |         |
+| palm        | 🖐            | `:raised_hand_with_fingers_splayed:` | U+1F590 |         |
+| peace       | ✌             | `:victory_hand:`          | U+270C      |         |
+| ~~peace inv.~~  | 🤘       | `:sign_of_the_horns:`     | U+1F918     | weak emoji     |
+| rock        | 🤘            | `:sign_of_the_horns:`     | U+1F918     |         |
+| stop        | ✋            | `:raised_hand:`           | U+270B      |         |
+| stop inv.   | 🤚            | `:raised_back_of_hand:`   | U+1F91A     |         |
+| ~~three~~   | 🤟            | `:love-you_gesture:`      | U+1F91F     | weak emoji        |
+| ~~three 2~~ |             |      |     | no such emoji        |
+| ~~two up~~  | ✌             | `:victory_hand:`          | U+270C      | weak emoji        |
+| ~~two up inv.~~ |         |      |      | no such emoji         |
 
