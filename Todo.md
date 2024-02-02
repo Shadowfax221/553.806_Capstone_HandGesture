@@ -4,7 +4,7 @@ timeline: https://docs.google.com/spreadsheets/d/1NNpIA2gp-X00Ras_H9GhWfCc83riU-
 - [x] Dataset selection
 
 ## Week 2
-- [] label matching and selection
-- [] reduce dataset size
-- [] image resize and gray-scaling 
+- [ ] label matching and selection
+- [ ] reduce dataset size
+- [ ] image resize and gray-scaling 
 
