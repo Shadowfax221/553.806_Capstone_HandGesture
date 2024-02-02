@@ -40,3 +40,6 @@ mapping each gesture to emoji:
 | ~~two up~~  | ✌             | `:victory_hand:`          | U+270C      | weak emoji        |
 | ~~two up inv.~~ |         |      |      | no such emoji         |
 
+### reduce dataset size
+
+The original dataset has 5000 to 30000+ pictures for each class. Reduce each to 10 for testing on resizing and gray-scaling. Reduced dataset is in \dataset. 
