@@ -51,4 +51,5 @@ The original dataset has 5000 to 30000+ pictures for each class. Reduce each to 
 The hand gesture dataset was processed through a two-step procedure: 
 1. Each image was converted from its original RGB format to grayscale, effectively reducing the color information to shades of gray, which simplifies the data while retaining essential features.
 2. All images were resized to a uniform dimension, ensuring consistency across the dataset, which is crucial for effective training and analysis in machine learning models.
-This preprocessing enhances computational efficiency and standardizes the input for subsequent tasks.
+
+These procedures enhances computational efficiency and standardizes the input for subsequent tasks.
