@@ -10,9 +10,9 @@ dataset source: https://github.com/hukenovs/hagrid
 ## Week 2
 - [x] label matching and selection
 - [x] reduce dataset size
-- [ ] image resize and gray-scaling 
+- [x] image resize and gray-scaling 
 
-### label matching and selection
+### Label matching and selection
 
 18 classes of gesture of gestures in dataset: 
 
@@ -42,6 +42,14 @@ mapping each gesture to emoji:
 | ~~two up~~  | ✌             | `:victory_hand:`          | U+270C      | weak emoji        |
 | ~~two up inv.~~ |         |      |      | no such emoji         |
 
-### reduce dataset size
+### Reducing dataset size
 
 The original dataset has 5000 to 30000+ pictures for each class. Reduce each to 100 for testing on resizing and gray-scaling. Reduced dataset is in \dataset. 
+
+### Gray-scaling and resizing
+
+The hand gesture dataset was processed through a two-step procedure: 
+1. Each image was converted from its original RGB format to grayscale, effectively reducing the color information to shades of gray, which simplifies the data while retaining essential features.
+2. All images were resized to a uniform dimension, ensuring consistency across the dataset, which is crucial for effective training and analysis in machine learning models.
+
+These procedures enhances computational efficiency and standardizes the input for subsequent tasks.
