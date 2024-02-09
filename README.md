@@ -58,8 +58,9 @@ These procedures enhances computational efficiency and standardizes the input fo
 ## Week 3
 
 - [x] Background removal
+- [x] Skeleton structures detection
 
-### Background Removal
+### Background removal
 
 Reference and based on the work: https://github.com/Gogul09/gesture-recognition?tab=readme-ov-file
 
