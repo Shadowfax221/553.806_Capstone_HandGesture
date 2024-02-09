@@ -53,3 +53,22 @@ The hand gesture dataset was processed through a two-step procedure:
 2. All images were resized to a uniform dimension, ensuring consistency across the dataset, which is crucial for effective training and analysis in machine learning models.
 
 These procedures enhances computational efficiency and standardizes the input for subsequent tasks.
+
+
+## Week 3
+
+- [x] Background removal
+
+### Background Removal
+
+Reference and based on the work: https://github.com/Gogul09/gesture-recognition?tab=readme-ov-file
+
+This code is designed to detect and segment a hand in real-time using a webcam feed with OpenCV in Python. 
+
+
+
+The original script performs real-time hand detection using a webcam. It initializes the webcam and defines a Region of Interest (ROI) for detecting the hand. Each frame captured from the webcam is processed to isolate this ROI, which is then converted to grayscale and blurred for noise reduction. The script uses a running average method to model the background and segments the hand by identifying differences between the background and current frame. When a hand is detected within the ROI, it's outlined with contours, and the result is displayed in real-time. The script allows continuous hand detection until the user exits by pressing a designated key.
+
+
+
+
