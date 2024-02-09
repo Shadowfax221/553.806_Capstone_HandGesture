@@ -13,7 +13,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
       image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
       detected_image = hands.process(image)
       image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-  
+
       if detected_image.multi_hand_landmarks:
           for hand_lms in detected_image.multi_hand_landmarks:
               mp_drawing.draw_landmarks(image, hand_lms,
@@ -25,7 +25,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) a
                                         )
   
       cv2.imshow('Webcam', image)
-  
+    
       if cv2.waitKey(1) & 0xFF == ord('q'):
           break
 
