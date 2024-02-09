@@ -6,10 +6,23 @@
 import cv2
 import imutils
 import numpy as np
+import os
 
 # global variables
 bg = None
 
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Create the path for the "snapshots" folder within the same directory
+save_path = os.path.join(script_dir, "snapshots")
+
+# Check if the folder exists, and if not, create it
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
+
+# Counter for image naming
+snapshot_counter = 0
 #--------------------------------------------------
 # To find the running average over the background
 #--------------------------------------------------
@@ -102,6 +115,16 @@ if __name__ == "__main__":
                 # draw the segmented region and display the frame
                 cv2.drawContours(clone, [segmented + (right, top)], -1, (0, 0, 255))
                 cv2.imshow("Thesholded", thresholded)
+
+                # if the user pressed "s", then take a snapshot
+                keypress = cv2.waitKey(1) & 0xFF
+                if keypress == ord('s'):  # Press 's' to take a snapshot
+                    snapshot_counter += 1
+                    roi_snapshot = clone[top:bottom, right:left]
+                    cv2.imwrite(os.path.join(save_path, f"roi_snapshot_{snapshot_counter}.jpg"), roi_snapshot)
+                    cv2.imwrite(os.path.join(save_path, f"thresholded_snapshot_{snapshot_counter}.jpg"), thresholded)
+                    print(f"Snapshot {snapshot_counter} saved.")
+
 
         # draw the segmented hand
         cv2.rectangle(clone, (left, top), (right, bottom), (0,255,0), 2)
