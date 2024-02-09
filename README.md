@@ -53,3 +53,28 @@ The hand gesture dataset was processed through a two-step procedure:
 2. All images were resized to a uniform dimension, ensuring consistency across the dataset, which is crucial for effective training and analysis in machine learning models.
 
 These procedures enhances computational efficiency and standardizes the input for subsequent tasks.
+
+
+## Week 3
+
+- [x] Background removal
+- [x] Skeleton structures detection
+
+### Background removal
+
+Reference and based on the work: https://github.com/Gogul09/gesture-recognition?tab=readme-ov-file
+
+This code is designed to detect and segment a hand in real-time using a webcam feed with OpenCV in Python. 
+
+* Original script:
+
+The original script performs real-time hand detection using a webcam. It initializes the webcam and defines a Region of Interest (ROI) for detecting the hand. Each frame captured from the webcam is processed to isolate this ROI, which is then converted to grayscale and blurred for noise reduction. The script uses a running average method to model the background and segments the hand by identifying differences between the background and current frame. When a hand is detected within the ROI, it's outlined with contours, and the result is displayed in real-time. The script allows continuous hand detection until the user exits by pressing a designated key.
+
+* Functionalities added:
+
+The enhancements to the script introduce the capability to capture and save snapshots of the hand detection process. By pressing a specific key, the user can take a snapshot of both the ROI and the processed image showing the detected hand. These images are saved in a newly created "snapshots" folder in the script's directory. Each saved image is uniquely named using a counter to avoid overwriting. This feature enables users to save specific moments of the hand detection process for further analysis or record-keeping.
+
+![image](https://github.com/Shadowfax221/553.806_Capstone_HandGesture/assets/126203843/d2e85340-3031-42f5-939e-f02f1d5fe278)
+
+
+
