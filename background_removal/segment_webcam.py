@@ -2,11 +2,12 @@
 # SEGMENT HAND REGION FROM A VIDEO SEQUENCE
 #-------------------------------------------
 
+import os
+
 # organize imports
 import cv2
 import imutils
 import numpy as np
-import os
 
 # global variables
 bg = None
@@ -68,7 +69,6 @@ if __name__ == "__main__":
     # get the reference to the webcam
     camera = cv2.VideoCapture(0)
 
-    # region of interest (ROI) coordinates
     top, right, bottom, left = 10, 250, 325, 590
 
     # initialize num of frames
