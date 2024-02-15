@@ -77,4 +77,13 @@ The enhancements to the script introduce the capability to capture and save snap
 ![image](https://github.com/Shadowfax221/553.806_Capstone_HandGesture/assets/126203843/d2e85340-3031-42f5-939e-f02f1d5fe278)
 
 
+## Week 4
+- [x] Train model using own dataset (15 gestures, 100 images for each)
+- [x] Valid model and display result
 
+![image](https://github.com/Shadowfax221/553.806_Capstone_HandGesture/assets/48790906/ac8afc26-05dc-469c-b553-91496b21ff4d)
+
+TODO next week: 
+- [ ] Data cleaning: larger box size; remove low resolution image
+- [ ] Increase training size
+- [ ] Play with parameters
