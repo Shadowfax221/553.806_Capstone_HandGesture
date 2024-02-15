@@ -39,7 +39,8 @@ for label in os.listdir(annotations_dir):
         image_name_with_ext = f"{key}.jpg"
         image_path = os.path.join(source_dir, label_name, image_name_with_ext)
         if os.path.exists(image_path):
-            selected_images.append((image_name_with_ext, annotations[key]['bboxes'][0]))
+            label_idx = annotations[key]['labels'].index(label_name)
+            selected_images.append((image_name_with_ext, annotations[key]['bboxes'][label_idx]))
     print(label_name, len(selected_images))
 
     # Copy and crop selected images
