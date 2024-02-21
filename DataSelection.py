@@ -9,7 +9,6 @@ target_dir = "C:/Users/Ian/git/553.806_Capstone_HandGesture/dataset_selected"
 annotations_dir = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
 labels = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘
 NUM_EXAMPLES = 1000
-NUM_NO_GESTURE = NUM_EXAMPLES // len(labels)
 
 # Remove the directory and all its contents
 if os.path.exists(target_dir):
@@ -34,8 +33,19 @@ def crop_image(image_path, bbox):
         y1 = y0 + int(bbox[3] * height)
         return img.crop((x0, y0, x1, y1))
 
+# Function to save and crop selected images
+def save_image(label_name, images, no_gesture=False, target_dir=target_dir):
+    if no_gesture:
+        target_subdir = os.path.join(target_dir, "none")
+    else:
+        target_subdir = os.path.join(target_dir, label_name)
+    os.makedirs(target_subdir, exist_ok=True)
+    for image_name, bbox in images:
+        source_image_path = os.path.join(source_dir, label_name, image_name)
+        cropped_image = crop_image(source_image_path, bbox)
+        target_image_path = os.path.join(target_subdir, image_name)
+        cropped_image.save(target_image_path)
 
-no_gesture_images = []
 
 # Iterate over labels (annotation files)
 for label_name in labels:
@@ -43,38 +53,25 @@ for label_name in labels:
 
     selected_no_gesture = 0
     selected_images = []
+    no_gesture_images = []
     keys = list(annotations.keys())
     selected_keys = random.sample(keys, min(NUM_EXAMPLES, len(keys)))
     for key in selected_keys:
-        image_name_with_ext = f"{key}.jpg"
-        image_path = os.path.join(source_dir, label_name, image_name_with_ext)
+        image_name = f"{key}.jpg"
+        image_path = os.path.join(source_dir, label_name, image_name)
         if os.path.exists(image_path):
-            label_idx = annotations[key]['labels'].index(label_name)
-            selected_images.append((image_name_with_ext, annotations[key]['bboxes'][label_idx]))
-        if "no_gesture" in annotations[key]['labels'] and selected_no_gesture < NUM_NO_GESTURE:
-            no_gesture_idx = annotations[key]['labels'].index("no_gesture")
-            no_gesture_images.append((key, annotations[key]['bboxes'][no_gesture_idx]))
-            selected_no_gesture += 1
+            key_labels = annotations[key]['labels']
+            key_bboxes = annotations[key]['bboxes']
+            selected_images.append((image_name, key_bboxes[key_labels.index(label_name)]))
+            if "no_gesture" in key_labels:
+                no_gesture_images.append((image_name, key_bboxes[key_labels.index("no_gesture")]))
+                selected_no_gesture += 1
+
     print(label_name, len(selected_images), selected_no_gesture)
 
-    # Copy and crop selected images
-    target_subdir = os.path.join(target_dir, label_name)
-    os.makedirs(target_subdir, exist_ok=True)
-    for image_name, bbox in selected_images:
-        source_image_path = os.path.join(source_dir, label_name, image_name)
-        cropped_image = crop_image(source_image_path, bbox)
-        target_image_path = os.path.join(target_subdir, image_name)
-        cropped_image.save(target_image_path)
+    # Copy and crop selected images and no_gesture images
+    save_image(label_name, selected_images)
+    save_image(label_name, no_gesture_images, no_gesture=True)
 
-# Process 'no_gesture' images
-target_subdir = os.path.join(target_dir, "none")
-os.makedirs(target_subdir, exist_ok=True)
-for key, bbox in no_gesture_images:
-    image_name_with_ext = f"{key}.jpg"
-    source_image_path = os.path.join(source_dir, image_name_with_ext)
-    if os.path.exists(source_image_path):
-        cropped_image = crop_image(source_image_path, bbox)
-        target_image_path = os.path.join(target_subdir, image_name_with_ext)
-        cropped_image.save(target_image_path)
 
 print('DONE')
