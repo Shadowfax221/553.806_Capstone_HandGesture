@@ -87,3 +87,22 @@ TODO next week:
 - [ ] Data cleaning: larger box size; remove low resolution image
 - [ ] Increase training size
 - [ ] Play with parameters
+
+
+## Week 5
+
+labels: 
+| idx | dataset     | emoji         | shortcode                 | Unicode     | comment |
+|-----|-------------|---------------|---------------------------|-------------|---------|
+|0| call        | 🤙            | `:call_me_hand:`          | U+1F919     |         |
+|1| dislike     | 👎            | `:thumbs_down:`           | U+1F44E     |         |
+|2| fist        | ✊            | `:raised_fist:`           | U+270A      |         |
+|3| like        | 👍            | `:thumbs_up:`             | U+1F44D     |         |
+|4| mute        | 🤐            | `:zipper_mouth_face:`     | U+1F910     | uncommon |
+|5| ok          | 👌            | `:ok_hand:`               | U+1F44C     |         |
+|6| one         | ☝             | `:index_pointing_up:`     | U+261D      |         |
+|7| palm        | 🖐            | `:raised_hand_with_fingers_splayed:` | U+1F590 |         |
+|8| peace       | ✌             | `:victory_hand:`          | U+270C      |         |
+|9| rock        | 🤘            | `:sign_of_the_horns:`     | U+1F918     |         |
+|10| stop        | ✋            | `:raised_hand:`           | U+270B      | similar to stop inv        |
+|11| stop inv.   | 🤚            | `:raised_back_of_hand:`   | U+1F91A     | similar to stop        |
