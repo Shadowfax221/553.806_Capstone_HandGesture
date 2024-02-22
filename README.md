@@ -91,6 +91,15 @@ TODO next week:
 
 ## Week 5
 
+- [x] New Data Selection
+- [x] Hyperparameter tuning on mediapipe model
+- [x] Livestream testing
+- [x] Self-implemented neural network with tensorflow
+
+### New Data Selection
+
+We have expanded our dataset to include 1,000 images per category, consolidating them into 11 distinct labels/categories.
+
 labels: 
 | idx | dataset     | emoji         | shortcode                 | Unicode     | comment |
 |-----|-------------|---------------|---------------------------|-------------|---------|
@@ -106,3 +115,15 @@ labels:
 |9| rock        | 🤘            | `:sign_of_the_horns:`     | U+1F918     |         |
 |10| stop        | ✋            | `:raised_hand:`           | U+270B      | similar to stop inv        |
 |11| stop inv.   | 🤚            | `:raised_back_of_hand:`   | U+1F91A     | similar to stop        |
+
+
+### Hyperparamter tuning on mediapipe model
+
+For the mediapipe model, we have done some hyperparameter tuning, which includes:
+
+* Network Shape
+  ![image.png](attachment:image.png)
+* Dropout Rate = 0.2
+* Batch Size = 10
+
+
