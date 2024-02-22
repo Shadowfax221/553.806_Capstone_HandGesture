@@ -4,11 +4,12 @@ import json
 import shutil
 from PIL import Image
 
+NUM_EXAMPLES = 1000
+DATASET_NAME = 'dataset_selected'
 source_dir = "E:/MyDatasets/hagrid_dataset_512"
-target_dir = "C:/Users/Ian/git/553.806_Capstone_HandGesture/dataset_selected"
+target_dir = f"C:/Users/Ian/git/553.806_Capstone_HandGesture/{DATASET_NAME}"
 annotations_dir = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
 labels = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘
-NUM_EXAMPLES = 1000
 
 # Remove the directory and all its contents
 if os.path.exists(target_dir):
@@ -51,9 +52,9 @@ def save_image(label_name, images, no_gesture=False, target_dir=target_dir):
 for label_name in labels:
     annotations = read_annotations(label_name)
 
-    selected_no_gesture = 0
+    # selected_no_gesture = 0
     selected_images = []
-    no_gesture_images = []
+    # no_gesture_images = []
     keys = list(annotations.keys())
     selected_keys = random.sample(keys, min(NUM_EXAMPLES, len(keys)))
     for key in selected_keys:
@@ -63,15 +64,15 @@ for label_name in labels:
             key_labels = annotations[key]['labels']
             key_bboxes = annotations[key]['bboxes']
             selected_images.append((image_name, key_bboxes[key_labels.index(label_name)]))
-            if "no_gesture" in key_labels:
-                no_gesture_images.append((image_name, key_bboxes[key_labels.index("no_gesture")]))
-                selected_no_gesture += 1
+            # if "no_gesture" in key_labels:
+            #     no_gesture_images.append((image_name, key_bboxes[key_labels.index("no_gesture")]))
+            #     selected_no_gesture += 1
 
-    print(label_name, len(selected_images), selected_no_gesture)
+    print(label_name, len(selected_images))
 
     # Copy and crop selected images and no_gesture images
     save_image(label_name, selected_images)
-    save_image(label_name, no_gesture_images, no_gesture=True)
+    # save_image(label_name, no_gesture_images, no_gesture=True)
 
 
 print('DONE')
