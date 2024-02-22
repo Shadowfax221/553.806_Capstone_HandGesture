@@ -4,12 +4,12 @@ import json
 import shutil
 from PIL import Image
 
-NUM_EXAMPLES = 1000
-DATASET_NAME = 'dataset_selected'
+NUM_EXAMPLES = 125
+DATASET_NAME = 'dataset_selected125'
 source_dir = "E:/MyDatasets/hagrid_dataset_512"
 target_dir = f"C:/Users/Ian/git/553.806_Capstone_HandGesture/{DATASET_NAME}"
 annotations_dir = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
-labels = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘
+labels = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
 
 # Remove the directory and all its contents
 if os.path.exists(target_dir):
