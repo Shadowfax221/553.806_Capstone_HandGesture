@@ -134,7 +134,11 @@ Evaluated our custom-trained model using a live stream feed and output. This was
 ### Self-implemented neural network with tensorflow
 
 Used tensorflow to build another model with tensorflow. The process includes:
-- Turning 
+- Turning landmarks into csv files.
+- Using data in csv file for training in custom tensorflow neural network.
+- Testing result in a local livestream.
+
+* Area for Enhancement: Low accuracy (need to optimize the model), Hand not detected in some cases.
 
 
 
