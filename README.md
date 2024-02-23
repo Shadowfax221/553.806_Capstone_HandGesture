@@ -121,9 +121,9 @@ labels:
 
 Conducted hyperparameter tuning that encompasses adjustments in:
 
-* Network Shape
-* Dropout Rate
-* Batch Size
+* Network shape
+* Dropout rate
+* Batch size
 
 ### Livestream Testing
 
