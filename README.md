@@ -98,7 +98,7 @@ TODO next week:
 
 ### New Data Selection
 
-We have expanded our dataset to include 1,000 images per category, consolidating them into 11 distinct labels/categories.
+Expanded our dataset to include 1,000 images per category, consolidating them into 11 distinct labels/categories.
 
 labels: 
 | idx | dataset     | emoji         | shortcode                 | Unicode     | comment |
@@ -119,11 +119,24 @@ labels:
 
 ### Hyperparamter tuning on mediapipe model
 
-For the mediapipe model, we have done some hyperparameter tuning, which includes:
+Conducted hyperparameter tuning that encompasses adjustments in:
 
 * Network Shape
-  ![image.png](attachment:image.png)
-* Dropout Rate = 0.2
-* Batch Size = 10
+* Dropout Rate
+* Batch Size
+
+### Livestream Testing
+
+Evaluated our custom-trained model using a live stream feed and output. This was facilitated through [MediaPipe Studio(]https://mediapipe-studio.webapps.google.com/studio/demo/gesture_recognizer), where we uploaded our custom model for testing.
+
+* Area for Enhancement: The "none" label problem.
+
+### Self-implemented neural network with tensorflow
+
+Used tensorflow to build another model with tensorflow. The process includes:
+- Turning 
 
 
+
+
+  
