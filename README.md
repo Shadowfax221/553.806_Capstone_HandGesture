@@ -134,7 +134,7 @@ Area for Enhancement:
 
 ### Self-implemented neural network with tensorflow
 
-Used tensorflow to build another model with tensorflow. The process includes:
+Used tensorflow to build another model with tensorflow. Reference: [kivini](https://github.com/kinivi/hand-gesture-recognition-mediapipe). The process includes:
 - Turning landmarks into csv files.
 - Using data in csv file for training in custom tensorflow neural network.
 - Testing result in a local livestream.
