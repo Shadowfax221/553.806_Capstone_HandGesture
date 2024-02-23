@@ -127,7 +127,7 @@ Conducted hyperparameter tuning that encompasses adjustments in:
 
 ### Livestream Testing
 
-Evaluated our custom-trained model using a live stream feed and output. This was facilitated through [MediaPipe Studio(]https://mediapipe-studio.webapps.google.com/studio/demo/gesture_recognizer), where we uploaded our custom model for testing.
+Evaluated our custom-trained model using a live stream feed and output. This was facilitated through [MediaPipe Studio](https://mediapipe-studio.webapps.google.com/studio/demo/gesture_recognizer), where we uploaded our custom model for testing.
 
 * Area for Enhancement: The "none" label problem.
 
