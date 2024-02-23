@@ -129,7 +129,8 @@ Conducted hyperparameter tuning that encompasses adjustments in:
 
 Evaluated our custom-trained model using a live stream feed and output. This was facilitated through [MediaPipe Studio](https://mediapipe-studio.webapps.google.com/studio/demo/gesture_recognizer), where we uploaded our custom model for testing.
 
-* Area for Enhancement: The "none" label problem.
+Area for Enhancement: 
+- The "none" label problem.
 
 ### Self-implemented neural network with tensorflow
 
@@ -138,7 +139,9 @@ Used tensorflow to build another model with tensorflow. The process includes:
 - Using data in csv file for training in custom tensorflow neural network.
 - Testing result in a local livestream.
 
-* Area for Enhancement: Low accuracy (need to optimize the model), Hand not detected in some cases.
+Area for Enhancement: 
+- Low accuracy (need to optimize the model).
+- Hand not detected in some cases.
 
 
 
