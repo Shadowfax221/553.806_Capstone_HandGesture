@@ -1,4 +1,3 @@
-# WARNING: DO NOT run this, some bug exist
 import csv
 import json
 import os
@@ -58,7 +57,7 @@ with open(csv_filename, 'w', newline='') as csvfile:
                 row = [label_dict[label]] 
                 for landmark in hand_landmarks:
                     if is_point_in_bbox(landmark.x, landmark.y, gesture_bboxes):
-                        row.extend([landmark.x, landmark.y])        # may add landmark.z
+                        row.extend([landmark.x, landmark.y, landmark.z])        # may add landmark.z
                 
                 if len(row) == 64:
                     csvwriter.writerow(row)
