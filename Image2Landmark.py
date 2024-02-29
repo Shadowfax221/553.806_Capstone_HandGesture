@@ -1,18 +1,17 @@
-import os
+# WARNING: DO NOT run this, some bug exist
 import csv
 import json
+import os
 import random
+
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-NUM_SAMPLES = 1000
-# DATASET_DIR = "E:/MyDatasets/hagrid_dataset_512"
-DATASET_DIR = "F:/files/hagrid_dataset_512/hagrid_dataset_512"
-# ANNOTATIONS_TRAIN = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
-ANNOTATIONS_TRAIN = "D:/Projects/553.806_Capstone_HandGesture/annotations/train"
-# LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
-LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted', 'four', 'three', 'three2', 'two_up', 'two_up_inverted']
+NUM_SAMPLES = 10
+DATASET_DIR = "E:/MyDatasets/hagrid_dataset_512"
+ANNOTATIONS_TRAIN = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
+LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
 
 
 # Check if the point (x, y) is within the bounding box.
@@ -59,7 +58,7 @@ with open(csv_filename, 'w', newline='') as csvfile:
                 row = [label_dict[label]] 
                 for landmark in hand_landmarks:
                     if is_point_in_bbox(landmark.x, landmark.y, gesture_bboxes):
-                        row.extend([landmark.x, landmark.y, landmark.z])        # may add landmark.z
+                        row.extend([landmark.x, landmark.y])        # may add landmark.z
                 
                 if len(row) == 64:
                     csvwriter.writerow(row)
