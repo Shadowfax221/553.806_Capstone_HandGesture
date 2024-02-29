@@ -144,6 +144,14 @@ Area for Enhancement:
 - Hand not detected in some cases.
 
 
+## Week 6
+
+Model training: 
+- without z-axis:
+![bd5edf69db7cd000741b8c2e67e61b0](https://github.com/Shadowfax221/553.806_Capstone_HandGesture/assets/48790906/3563483e-3916-4cc5-aafb-75809d17440b)
+
+- with z-axis:
+![image](https://github.com/Shadowfax221/553.806_Capstone_HandGesture/assets/48790906/614bb9af-8562-4796-a514-8e3b460948d2)
 
 
   
