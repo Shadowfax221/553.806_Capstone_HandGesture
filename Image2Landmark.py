@@ -6,10 +6,13 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-NUM_SAMPLES = 125
-DATASET_DIR = "E:/MyDatasets/hagrid_dataset_512"
-ANNOTATIONS_TRAIN = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
-LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
+NUM_SAMPLES = 1000
+# DATASET_DIR = "E:/MyDatasets/hagrid_dataset_512"
+DATASET_DIR = "F:/files/hagrid_dataset_512/hagrid_dataset_512"
+# ANNOTATIONS_TRAIN = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
+ANNOTATIONS_TRAIN = "D:/Projects/553.806_Capstone_HandGesture/annotations/train"
+# LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
+LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted', 'four', 'three', 'three2', 'two_up', 'two_up_inverted']
 
 
 # Check if the point (x, y) is within the bounding box.
