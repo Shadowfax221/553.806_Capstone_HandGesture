@@ -8,7 +8,7 @@ import tensorflow as tf
 landmarker_model_path = 'models/hand_landmarker.task'
 classifier_model_path='models/keypoint_classifier.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
-# LABELS = ['🤙', '👎', '✊', '👍', '🤐', '👌', '☝', '🖐', '✌', '🤘', '✋', '🤚']
+# LABELS = ['🤙',    👎', '✊'',',,', ',''    '  ,,',' ,,,'',,',',,,'',,,',',', 🤚']
 
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
@@ -40,11 +40,9 @@ def print_result(result: HandLandmarkerResult, output_image: mp.Image, timestamp
             output_details_tensor_index = output_details[0]['index']
             result = interpreter.get_tensor(output_details_tensor_index)
             result_index = np.argmax(np.squeeze(result))
+            score = np.squeeze(result)[result_index]
 
-            # hand_sign_id = KeyPointClassifier(landmark_xyz)
-            # print(f'{timestamp_ms}: {hand_sign_id}')
-
-            print(f'{timestamp_ms}: {LABELS[result_index]}')
+            print(f'{timestamp_ms}: {LABELS[result_index]}, {score}')
 
 
 options = HandLandmarkerOptions(
