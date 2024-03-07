@@ -5,7 +5,7 @@ import mediapipe as mp
 import numpy as np
 import tensorflow as tf
 
-recognizer_model_path = 'models/gesture_recognizer_emtryNone.task'
+recognizer_model_path = 'models/gesture_recognizer_emptyNone.task'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 # LABELS = ['🤙', '👎', '✊', '👍', '🤐', '👌', '☝', '🖐', '✌', '🤘', '✋', '🤚']
 
