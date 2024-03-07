@@ -7,8 +7,8 @@ import tensorflow as tf
 
 landmarker_model_path = 'models/hand_landmarker.task'
 classifier_model_path='models/keypoint_classifier.tflite'
-LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
-# LABELS = ['🤙',' 👎', '✊',' '👍,' ' 🤐,' 👌',' '☝,' '🖐,' '✌,' '🤘,' '✋,' 🤚']
+LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
+# LABELS = ['🤙', '👎', '✊', '👍', '🤐', '👌', '☝', '🖐', '✌', '🤘', '✋', '🤚']
 
 BaseOptions = mp.tasks.BaseOptions
 HandLandmarker = mp.tasks.vision.HandLandmarker
