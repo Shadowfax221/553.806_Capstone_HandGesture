@@ -7,9 +7,9 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-NUM_SAMPLES = 10
+NUM_SAMPLES = 100
 DATASET_DIR = "E:/MyDatasets/hagrid_dataset_512"
-ANNOTATIONS_TRAIN = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/train"
+ANNOTATIONS_DIR = "C:/Users/Ian/git/553.806_Capstone_HandGesture/annotations/test"
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']     # 12 gestures: 🤙, 👎, ✊, 👍, 🤐, 👌, ☝, 🖐, ✌, 🤘, ✋, 🤚
 
 
@@ -35,7 +35,7 @@ with open(csv_filename, 'w', newline='') as csvfile:
     
     # STEP 2: Load the input image.
     for label in LABELS:
-        with open(os.path.join(ANNOTATIONS_TRAIN, f"{label}.json"), 'r') as file:
+        with open(os.path.join(ANNOTATIONS_DIR, f"{label}.json"), 'r') as file:
             annotations = json.load(file)
         
         samples_cnt = 0
