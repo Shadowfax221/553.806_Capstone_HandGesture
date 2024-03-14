@@ -158,3 +158,22 @@ Model training:
 
 
   
+## Week 7
+
+## Week 8
+
+### Normalization:
+- Shift coordinates
+- Rotation
+- Flatten
+- Resizing
+
+### Hyperparamter Tuning:
+- Increased complexity 
+- Reduced dropout
+
+### Secondary Model
+- binary classification for label "palm" and "stop"
+
+![alt text](image.png)
+![alt text](image-1.png)
