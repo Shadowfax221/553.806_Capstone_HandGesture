@@ -85,7 +85,6 @@ def main():
                 # Hand sign classification
                 pre_processed_landmark_list = pre_process_landmark(landmark_list)
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                print(LABELS[hand_sign_id])
 
                 # Drawing part
                 debug_image = draw_bounding_rect(use_brect, debug_image, brect)
@@ -96,6 +95,12 @@ def main():
                                                 connection_drawing_spec=mp.solutions.drawing_utils.DrawingSpec(
                                                     color=(20, 180, 90), thickness=2, circle_radius=2)
                                                 )
+                debug_image = draw_info_text(
+                    debug_image,
+                    brect,
+                    handedness,
+                    LABELS[hand_sign_id],
+                )
         
         # Screen reflection #############################################################
         cv.imshow('Hand Gesture Recognition', debug_image)
@@ -157,6 +162,17 @@ def draw_bounding_rect(use_brect, image, brect):
     if use_brect:
         cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[3]),
                      (0, 0, 0), 1)
+    return image
+
+
+def draw_info_text(image, brect, handedness, hand_sign_text):
+    cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
+                 (0, 0, 0), -1)
+    info_text = handedness.classification[0].label[0:]
+    if hand_sign_text != "":
+        info_text = info_text + ':' + hand_sign_text
+    cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
+               cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
     return image
 
 
