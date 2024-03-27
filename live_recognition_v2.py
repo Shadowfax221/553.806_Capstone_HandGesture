@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 
 landmarker_model_path = 'models/hand_landmarker.task'
-classifier_model_path='models/keypoint_classifier.tflite'
+CLASSIFIER_MODEL_PATH='models/keypoint_classifier.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 
 def get_args():
@@ -142,7 +142,7 @@ def pre_process_landmark(landmark_list):
 
 
 def keypoint_classifier(landmark_list):
-    interpreter = tf.lite.Interpreter(model_path=classifier_model_path,
+    interpreter = tf.lite.Interpreter(model_path=CLASSIFIER_MODEL_PATH,
                                             num_threads=1)
     interpreter.allocate_tensors()
     input_details = interpreter.get_input_details()
