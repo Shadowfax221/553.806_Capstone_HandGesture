@@ -1,5 +1,6 @@
 import argparse
 import copy
+import itertools
 import time
 
 import cv2 as cv
@@ -78,11 +79,13 @@ def main():
                                                   results.multi_handedness):
                 # Bounding box calculation
                 brect = calc_bounding_rect(debug_image, hand_landmarks)
+                # Landmark calculation
+                landmark_list = calc_landmark_list(debug_image, hand_landmarks)
 
                 # Hand sign classification
-                pre_processed_landmark_list = hand_landmarks
-                print(hand_landmarks)
-                # hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
+                pre_processed_landmark_list = pre_process_landmark(landmark_list)
+                hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
+                print(LABELS[hand_sign_id])
 
                 # Drawing part
                 debug_image = draw_bounding_rect(use_brect, debug_image, brect)
@@ -116,6 +119,23 @@ def calc_bounding_rect(image, landmarks):
     return [x, y, x + w, y + h]
 
 
+def calc_landmark_list(image, landmarks):
+    landmark_list = []
+    for _, landmark in enumerate(landmarks.landmark):
+        landmark_list.append([landmark.x, landmark.y, landmark.z])
+    return landmark_list
+
+
+def pre_process_landmark(landmark_list):
+    temp_landmark_list = copy.deepcopy(landmark_list)
+
+    # Convert to a one-dimensional list
+    temp_landmark_list = list(
+        itertools.chain.from_iterable(temp_landmark_list))
+
+    return temp_landmark_list
+
+
 def keypoint_classifier(landmark_list):
     interpreter = tf.lite.Interpreter(model_path=classifier_model_path,
                                             num_threads=1)
@@ -130,7 +150,7 @@ def keypoint_classifier(landmark_list):
     output_details_tensor_index = output_details[0]['index']
     result = interpreter.get_tensor(output_details_tensor_index)
     result_index = np.argmax(np.squeeze(result))
-    score = np.squeeze(result)[result_index]
+    return result_index
 
 
 def draw_bounding_rect(use_brect, image, brect):
@@ -144,31 +164,6 @@ def draw_bounding_rect(use_brect, image, brect):
 
 
 
-# # Create a hand landmarker instance with the live stream mode:
-# def print_result(result: HandLandmarkerResult, output_image: mp.Image, timestamp_ms: int):
-#     if result.hand_landmarks:
-#         for hand_landmarks in result.hand_landmarks:
-#             landmark_list = [] 
-#             for landmark in hand_landmarks:
-#                 landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
-
-#         if len(landmark_list)==63:
-#             interpreter = tf.lite.Interpreter(model_path=classifier_model_path,
-#                                             num_threads=1)
-#             interpreter.allocate_tensors()
-#             input_details = interpreter.get_input_details()
-#             output_details = interpreter.get_output_details()
-#             input_details_tensor_index = input_details[0]['index']
-#             interpreter.set_tensor(
-#                 input_details_tensor_index,
-#                 np.array([landmark_list], dtype=np.float32))
-#             interpreter.invoke()
-#             output_details_tensor_index = output_details[0]['index']
-#             result = interpreter.get_tensor(output_details_tensor_index)
-#             result_index = np.argmax(np.squeeze(result))
-#             score = np.squeeze(result)[result_index]
-
-#             print(f'{timestamp_ms}: {LABELS[result_index]}, {score}')
 
 
 
