@@ -29,11 +29,8 @@ class Mediapipe_BodyModule():
 
 
     def draw_landmarks_on_image(self, annotated_image, hand_landmarks):
-        hand_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
-        hand_landmarks_proto.landmark.extend([
-            landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in hand_landmarks
-        ])
-        self.mp_drawing.draw_landmarks(annotated_image, hand_landmarks_proto,
+        
+        self.mp_drawing.draw_landmarks(annotated_image, hand_landmarks,
                                     self.mp_hands.HAND_CONNECTIONS,
                                     landmark_drawing_spec=mp.solutions.drawing_utils.DrawingSpec(
                                         color=(255, 0, 255), thickness=4, circle_radius=2),
@@ -42,7 +39,8 @@ class Mediapipe_BodyModule():
         )
         return annotated_image
     
-    def calc_bounding_rect(image, landmarks):
+
+    def calc_bounding_rect(self, image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]
         landmark_array = np.empty((0, 2), int)
         for _, landmark in enumerate(landmarks.landmark):
@@ -50,16 +48,24 @@ class Mediapipe_BodyModule():
             landmark_y = min(int(landmark.y * image_height), image_height - 1)
             landmark_point = [np.array((landmark_x, landmark_y))]
             landmark_array = np.append(landmark_array, landmark_point, axis=0)
-        x, y, w, h = cv.boundingRect(landmark_array)
+        x, y, w, h = cv2.boundingRect(landmark_array)
         return [x, y, x + w, y + h]
 
-
-    def draw_bounding_rect(self, annotated_image, detection_result):
-        for hand_landmarks in detection_result.hand_landmarks:
-            brect = self.calc_bounding_rect(annotated_image, hand_landmarks)
+    def draw_bounding_rect(self, annotated_image, brect):
         cv2.rectangle(annotated_image, (brect[0], brect[1]), (brect[2], brect[3]),
                     (0, 0, 0), 1)
         return annotated_image
+    
+
+    def draw_info_text(self, image, brect, score, hand_sign_text):
+        cv2.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
+                    (0, 0, 0), -1)
+        info_text = f"{score:.2f}"
+        if hand_sign_text != "":
+            info_text = info_text + ':' + hand_sign_text
+        cv2.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
+        return image
 
 
 
@@ -67,14 +73,6 @@ class Mediapipe_BodyModule():
     def print_result(self, result: GestureRecognizerResult, output_image: mp.Image, timestamp_ms: int):
         # print('pose landmarker result: {}'.format(result))
         self.results = result
-        #print(type(result))
-
-        if result.hand_landmarks:
-            for gesture in result.gestures:
-                for hand in gesture:
-                    category_name = hand.category_name
-                    score = hand.score
-            print(f'{timestamp_ms}: {category_name}, {score}')
     
     def main(self):
         options = GestureRecognizerOptions(
@@ -101,8 +99,23 @@ class Mediapipe_BodyModule():
 
                 if self.results is not None:
                     for hand_landmarks in self.results.hand_landmarks:
-                        annotated_image = self.draw_landmarks_on_image(annotated_image, hand_landmarks)
-                        # annotated_image = self.draw_bounding_rect(annotated_image, self.results)
+                        # hand_landmarks set up
+                        hand_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
+                        hand_landmarks_proto.landmark.extend([
+                            landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in hand_landmarks
+                        ])
+                        # drawing part
+                        annotated_image = self.draw_landmarks_on_image(annotated_image, hand_landmarks_proto)
+                        brect = self.calc_bounding_rect(annotated_image, hand_landmarks_proto)
+                        annotated_image = self.draw_bounding_rect(annotated_image, brect)
+                        annotated_image = self.draw_info_text(
+                            annotated_image,
+                            brect,
+                            self.results.gestures[0][0].score,
+                            self.results.gestures[0][0].category_name,
+                        )
+                        # print(self.results.gestures)
+                        
                     cv2.imshow('Show', annotated_image)
                 else:
                     cv2.imshow('Show', frame)
