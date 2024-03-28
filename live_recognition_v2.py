@@ -131,12 +131,57 @@ def calc_landmark_list(image, landmarks):
     return landmark_list
 
 
+def apply_rotation(label, points):
+    num_points = 21
+    point_0 = points[0]
+    point_8 = points[8]
+    if label == 'dislike' or label == 'like':
+        return points  # No rotation
+    elif label == 'call':
+        # Rotate to be parallel with X-axis
+        line = point_8 - point_0
+        angle = np.arctan2(line[2], line[0])  # Consider the X-Z plane
+        rotation_matrix = np.array([
+            [1, 0, 0],
+            [0, np.cos(angle), -np.sin(angle)],
+            [0, np.sin(angle), np.cos(angle)]
+        ])
+    else:
+        # Rotate to be parallel with Y-axis
+        line = point_8 - point_0
+        angle = np.arctan2(line[2], line[1])  # Consider the Y-Z plane
+        rotation_matrix = np.array([
+            [np.cos(angle), 0, np.sin(angle)],
+            [0, 1, 0],
+            [-np.sin(angle), 0, np.cos(angle)]
+        ])
+    # Apply rotation
+    for i in range(num_points):
+        points[i] = np.dot(rotation_matrix, points[i])
+    return points
+
+
 def pre_process_landmark(landmark_list):
     temp_landmark_list = copy.deepcopy(landmark_list)
+
+    # Convert to relative coordinates
+    base_x, base_y, base_z = 0, 0, 0
+    for index, landmark_point in enumerate(temp_landmark_list):
+        if index == 0:
+            base_x, base_y, base_z = landmark_point[0], landmark_point[1], landmark_point[2] 
+        temp_landmark_list[index][0] = temp_landmark_list[index][0] - base_x
+        temp_landmark_list[index][1] = temp_landmark_list[index][1] - base_y
+        temp_landmark_list[index][2] = temp_landmark_list[index][2] - base_z
 
     # Convert to a one-dimensional list
     temp_landmark_list = list(
         itertools.chain.from_iterable(temp_landmark_list))
+    
+    # Normalization
+    max_value = max(list(map(abs, temp_landmark_list)))
+    def normalize_(n):
+        return n / max_value
+    temp_landmark_list = list(map(normalize_, temp_landmark_list))
 
     return temp_landmark_list
 
