@@ -29,7 +29,6 @@ class Mediapipe_BodyModule():
 
 
     def draw_landmarks_on_image(self, annotated_image, hand_landmarks):
-        
         self.mp_drawing.draw_landmarks(annotated_image, hand_landmarks,
                                     self.mp_hands.HAND_CONNECTIONS,
                                     landmark_drawing_spec=mp.solutions.drawing_utils.DrawingSpec(
