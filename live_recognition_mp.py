@@ -21,7 +21,7 @@ VisionRunningMode = mp.tasks.vision.RunningMode
 
 
 
-class Mediapipe_BodyModule():
+class Mediapipe_HandModule():
     def __init__(self):
         self.mp_drawing = solutions.drawing_utils
         self.mp_hands = solutions.hands
@@ -95,7 +95,7 @@ class Mediapipe_BodyModule():
                 timestamp += 1
                 mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
                 recognizer.recognize_async(mp_image, timestamp)
-
+                
                 if self.results is not None:
                     for hand_landmarks in self.results.hand_landmarks:
                         # hand_landmarks set up
@@ -129,5 +129,5 @@ class Mediapipe_BodyModule():
 
 
 if __name__ == "__main__":
-    body_module = Mediapipe_BodyModule()
+    body_module = Mediapipe_HandModule()
     body_module.main()
