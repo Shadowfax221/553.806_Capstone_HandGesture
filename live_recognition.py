@@ -1,4 +1,5 @@
 import copy
+import itertools
 
 import cv2
 import mediapipe as mp
@@ -25,6 +26,21 @@ class Mediapipe_HandModule():
         self.results = None
 
 
+    def pre_process_landmark(self, landmarks):
+        landmark_list = []
+        # Convert to relative coordinates
+        base_x, base_y, base_z = 0, 0, 0
+        for idx, landmark in enumerate(landmarks.landmark):
+            if idx == 0:
+                base_x, base_y, base_z = landmark.x, landmark.y, landmark.z
+            landmark_list.append([landmark.x-base_x, landmark.y-base_y, landmark.z-base_z])
+        # Convert to a one-dimensional list
+        landmark_list = list(itertools.chain.from_iterable(landmark_list))
+        # Normalization
+        landmark_list = landmark_list / np.max(np.abs(landmark_list))
+        return landmark_list
+
+
     def draw_landmarks_on_image(self, annotated_image, hand_landmarks):
         self.mp_drawing.draw_landmarks(annotated_image, hand_landmarks,
                                     self.mp_hands.HAND_CONNECTIONS,
@@ -42,8 +58,8 @@ class Mediapipe_HandModule():
         for _, landmark in enumerate(landmarks.landmark):
             landmark_x = min(int(landmark.x * image_width), image_width - 1)
             landmark_y = min(int(landmark.y * image_height), image_height - 1)
-            landmark_point = [np.array((landmark_x, landmark_y))]
-            landmark_array = np.append(landmark_array, landmark_point, axis=0)
+            landmark = [np.array((landmark_x, landmark_y))]
+            landmark_array = np.append(landmark_array, landmark, axis=0)
         x, y, w, h = cv2.boundingRect(landmark_array)
         return [x, y, x + w, y + h]
 
@@ -95,11 +111,14 @@ class Mediapipe_HandModule():
 
                 if self.results is not None:
                     for hand_landmarks in self.results.hand_landmarks:
-                        # hand_landmarks set up
+                        # hand_landmarks set up ########################################################
                         hand_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
                         hand_landmarks_proto.landmark.extend([
                             landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in hand_landmarks
                         ])
+                        # Hand Classification ##########################################################
+                        pre_processed_landmarks = self.pre_process_landmark(hand_landmarks_proto)
+                        self.pre_process_landmark_v2(hand_landmarks_proto)
                         # drawing part
                         annotated_image = self.draw_landmarks_on_image(annotated_image, hand_landmarks_proto)
                         brect = self.calc_bounding_rect(annotated_image, hand_landmarks_proto)
