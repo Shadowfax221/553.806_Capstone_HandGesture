@@ -10,7 +10,22 @@ from mediapipe.framework.formats import landmark_pb2
 
 recognizer_model_path = 'models/gesture_recognizer_emptyNone.task'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
-# LABELS = ['🤙', '👎', '✊', '👍', '🤐', '👌', '☝', '🖐', '✌', '🤘', '✋', '🤚']
+LABELS_EMOJI = ['🤙', '👎', '✊', '👍', '🤐', '👌', '☝', '🖐', '✌', '🤘', '✋', '🤚']
+LABELS_MAP = {
+ 'call': '🤙',
+ 'dislike': '👎',
+ 'fist': '✊',
+ 'like': '👍',
+ 'mute': '🤐',
+ 'ok': '👌',
+ 'one': '☝',
+ 'palm': '🖐',
+ 'peace': '✌',
+ 'rock': '🤘',
+ 'stop': '✋',
+ 'stop_inverted': '🤚'
+}
+
 
 BaseOptions = mp.tasks.BaseOptions
 GestureRecognizer = mp.tasks.vision.GestureRecognizer
@@ -95,7 +110,7 @@ class Mediapipe_HandModule():
                 timestamp += 1
                 mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
                 recognizer.recognize_async(mp_image, timestamp)
-                
+
                 if self.results is not None:
                     for hand_landmarks in self.results.hand_landmarks:
                         # hand_landmarks set up
