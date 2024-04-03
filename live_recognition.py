@@ -8,8 +8,9 @@ import tensorflow as tf
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 
-landmarker_model_path = 'models/hand_landmarker.task'
-classifier_model_path='models/keypoint_classifier.tflite'
+LANDMARKER_MODEL_PATH = 'models/hand_landmarker.task'
+CLASSIFIER_MODEL_PATH1 = 'models/keypoint_classifier_part1 copy.tflite'
+CLASSIFIER_MODEL_PATH2 = 'models/keypoint_classifier_part2 copy.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 
 BaseOptions = mp.tasks.BaseOptions
@@ -29,16 +30,44 @@ class Mediapipe_HandModule():
     def pre_process_landmark(self, landmarks):
         landmark_list = []
         # Convert to relative coordinates
-        base_x, base_y, base_z = 0, 0, 0
-        for idx, landmark in enumerate(landmarks.landmark):
-            if idx == 0:
-                base_x, base_y, base_z = landmark.x, landmark.y, landmark.z
-            landmark_list.append([landmark.x-base_x, landmark.y-base_y, landmark.z-base_z])
-        # Convert to a one-dimensional list
-        landmark_list = list(itertools.chain.from_iterable(landmark_list))
-        # Normalization
-        landmark_list = landmark_list / np.max(np.abs(landmark_list))
+        # for idx, landmark in enumerate(landmarks):
+        #     if idx == 0:
+        #         base_x, base_y, base_z = landmark.x, landmark.y, landmark.z
+        #     landmark_list.extend([landmark.x-base_x, landmark.y-base_y, landmark.z-base_z])
+        # # Normalization
+        # landmark_list = landmark_list / np.max(np.abs(landmark_list))
+        for landmark in landmarks:
+            landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
+        landmark_list = np.array([landmark_list]).astype(np.float32)
         return landmark_list
+    
+
+    def load_tflite_model(self, tflite_model_path):
+        interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+        interpreter.allocate_tensors()
+        return interpreter
+
+    def tflite_predict(self, model, input_data):
+        input_details = model.get_input_details()
+        output_details = model.get_output_details()
+        model.set_tensor(input_details[0]['index'], input_data)
+        model.invoke()
+        output_data = model.get_tensor(output_details[0]['index'])
+        return output_data
+
+    def integrated_prediction(self, primary_model, secondary_model, input_data, threshold=0.5):
+        primary_pred = self.tflite_predict(primary_model, input_data)
+        primary_scores = np.max(primary_pred, axis=1)
+        primary_label = np.argmax(primary_pred, axis=1)
+        label_stop = LABELS.index('stop')
+        label_palm = LABELS.index('palm')
+        secondary_indices = np.logical_or(primary_label == label_stop, primary_label == label_palm)
+        secondary_input = input_data[secondary_indices]
+        if secondary_input.shape[0] > 0:  # Check if there's any data to predict with the secondary model
+            secondary_pred = self.tflite_predict(secondary_model, secondary_input)
+            secondary_label = np.argmax(secondary_pred, axis=1)
+            primary_label[secondary_indices] = np.where(secondary_label == 0, label_stop, label_palm)
+        return primary_scores, primary_label
 
 
     def draw_landmarks_on_image(self, annotated_image, hand_landmarks):
@@ -88,7 +117,7 @@ class Mediapipe_HandModule():
     
     def main(self):
         options = HandLandmarkerOptions(
-            base_options=BaseOptions(model_asset_path=landmarker_model_path),
+            base_options=BaseOptions(model_asset_path=LANDMARKER_MODEL_PATH),
             running_mode=VisionRunningMode.LIVE_STREAM,
             num_hands=1,
             result_callback=self.print_result)
@@ -116,9 +145,13 @@ class Mediapipe_HandModule():
                         hand_landmarks_proto.landmark.extend([
                             landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in hand_landmarks
                         ])
+
                         # Hand Classification ##########################################################
-                        pre_processed_landmarks = self.pre_process_landmark(hand_landmarks_proto)
-                        self.pre_process_landmark_v2(hand_landmarks_proto)
+                        pre_processed_landmarks = self.pre_process_landmark(hand_landmarks)
+                        primary_model = self.load_tflite_model(CLASSIFIER_MODEL_PATH1)
+                        secondary_model = self.load_tflite_model(CLASSIFIER_MODEL_PATH2)
+                        score, predictions = self.integrated_prediction(primary_model, secondary_model, pre_processed_landmarks)
+                        
                         # drawing part
                         annotated_image = self.draw_landmarks_on_image(annotated_image, hand_landmarks_proto)
                         brect = self.calc_bounding_rect(annotated_image, hand_landmarks_proto)
@@ -126,8 +159,8 @@ class Mediapipe_HandModule():
                         annotated_image = self.draw_info_text(
                             annotated_image,
                             brect,
-                            0.9999,
-                            "yes",
+                            score[0],
+                            LABELS[predictions[0]],
                         )
                         # print(self.results.gestures)
                         

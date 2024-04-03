@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 landmarker_model_path = 'models/hand_landmarker.task'
-classifier_model_path='models/keypoint_classifier.tflite'
+classifier_model_path='models/keypoint_classifier_part1.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 
 BaseOptions = mp.tasks.BaseOptions
