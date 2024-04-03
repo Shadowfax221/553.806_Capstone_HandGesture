@@ -1,9 +1,11 @@
-import time
+import copy
 
 import cv2
 import mediapipe as mp
 import numpy as np
 import tensorflow as tf
+from mediapipe import solutions
+from mediapipe.framework.formats import landmark_pb2
 
 landmarker_model_path = 'models/hand_landmarker.task'
 classifier_model_path='models/keypoint_classifier.tflite'
@@ -14,58 +16,115 @@ HandLandmarker = mp.tasks.vision.HandLandmarker
 HandLandmarkerOptions = mp.tasks.vision.HandLandmarkerOptions
 HandLandmarkerResult = mp.tasks.vision.HandLandmarkerResult
 VisionRunningMode = mp.tasks.vision.RunningMode
-capture = cv2.VideoCapture(0)
 
 
-# Create a hand landmarker instance with the live stream mode:
-def print_result(result: HandLandmarkerResult, output_image: mp.Image, timestamp_ms: int):
-    if result.hand_landmarks:
-        for hand_landmarks in result.hand_landmarks:
-            landmark_list = [] 
-            for landmark in hand_landmarks:
-                landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
-
-        if len(landmark_list)==63:
-            interpreter = tf.lite.Interpreter(model_path=classifier_model_path,
-                                              num_threads=1)
-            interpreter.allocate_tensors()
-            input_details = interpreter.get_input_details()
-            output_details = interpreter.get_output_details()
-            input_details_tensor_index = input_details[0]['index']
-            interpreter.set_tensor(
-                input_details_tensor_index,
-                np.array([landmark_list], dtype=np.float32))
-            interpreter.invoke()
-            output_details_tensor_index = output_details[0]['index']
-            result = interpreter.get_tensor(output_details_tensor_index)
-            result_index = np.argmax(np.squeeze(result))
-            score = np.squeeze(result)[result_index]
-
-            print(f'{timestamp_ms}: {LABELS[result_index]}, {score}')
+class Mediapipe_HandModule():
+    def __init__(self):
+        self.mp_drawing = solutions.drawing_utils
+        self.mp_hands = solutions.hands
+        self.results = None
 
 
-options = HandLandmarkerOptions(
-    base_options=BaseOptions(model_asset_path=landmarker_model_path),
-    running_mode=VisionRunningMode.LIVE_STREAM,
-    num_hands=1,
-    result_callback=print_result)
+    def draw_landmarks_on_image(self, annotated_image, hand_landmarks):
+        self.mp_drawing.draw_landmarks(annotated_image, hand_landmarks,
+                                    self.mp_hands.HAND_CONNECTIONS,
+                                    landmark_drawing_spec=mp.solutions.drawing_utils.DrawingSpec(
+                                        color=(255, 0, 255), thickness=4, circle_radius=2),
+                                    connection_drawing_spec=mp.solutions.drawing_utils.DrawingSpec(
+                                        color=(20, 180, 90), thickness=2, circle_radius=2)
+        )
+        return annotated_image
+    
 
-with HandLandmarker.create_from_options(options) as landmarker:
-    while capture.isOpened():
-        ret, frame = capture.read()
-        frame = cv2.flip(frame, 1)
-        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    def calc_bounding_rect(self, image, landmarks):
+        image_width, image_height = image.shape[1], image.shape[0]
+        landmark_array = np.empty((0, 2), int)
+        for _, landmark in enumerate(landmarks.landmark):
+            landmark_x = min(int(landmark.x * image_width), image_width - 1)
+            landmark_y = min(int(landmark.y * image_height), image_height - 1)
+            landmark_point = [np.array((landmark_x, landmark_y))]
+            landmark_array = np.append(landmark_array, landmark_point, axis=0)
+        x, y, w, h = cv2.boundingRect(landmark_array)
+        return [x, y, x + w, y + h]
 
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
-        frame_timestamp_ms = int(time.time() * 1000)
-        landmarker.detect_async(mp_image, frame_timestamp_ms)
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    def draw_bounding_rect(self, annotated_image, brect):
+        cv2.rectangle(annotated_image, (brect[0], brect[1]), (brect[2], brect[3]),
+                    (0, 0, 0), 1)
+        return annotated_image
+    
 
-        cv2.imshow('Webcam', image)
+    def draw_info_text(self, image, brect, score, hand_sign_text):
+        cv2.rectangle(image, (brect[0], brect[1]), (brect[2], brect[1] - 22),
+                    (0, 0, 0), -1)
+        info_text = f"{score:.2f}"
+        if hand_sign_text != "":
+            info_text = info_text + ':' + hand_sign_text
+        cv2.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
+        return image
+
+
+
+    # Create a gesture landmarker instance with the live stream mode:
+    def print_result(self, result: HandLandmarkerResult, output_image: mp.Image, timestamp_ms: int):
+        # print('pose landmarker result: {}'.format(result))
+        self.results = result
+    
+    def main(self):
+        options = HandLandmarkerOptions(
+            base_options=BaseOptions(model_asset_path=landmarker_model_path),
+            running_mode=VisionRunningMode.LIVE_STREAM,
+            num_hands=1,
+            result_callback=self.print_result)
         
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        capture = cv2.VideoCapture(0)
 
-        
-capture.release()
-cv2.destroyAllWindows()
+        timestamp = 0
+        with HandLandmarker.create_from_options(options) as landmarker:
+            while capture.isOpened():
+                ret, frame = capture.read()
+                if not ret:
+                    print("Ignoring empty frame")
+                    break
+                frame = cv2.flip(frame, 1)
+                annotated_image = copy.deepcopy(frame)
+                
+                timestamp += 1
+                mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
+                landmarker.detect_async(mp_image, timestamp)
+
+                if self.results is not None:
+                    for hand_landmarks in self.results.hand_landmarks:
+                        # hand_landmarks set up
+                        hand_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
+                        hand_landmarks_proto.landmark.extend([
+                            landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in hand_landmarks
+                        ])
+                        # drawing part
+                        annotated_image = self.draw_landmarks_on_image(annotated_image, hand_landmarks_proto)
+                        brect = self.calc_bounding_rect(annotated_image, hand_landmarks_proto)
+                        annotated_image = self.draw_bounding_rect(annotated_image, brect)
+                        annotated_image = self.draw_info_text(
+                            annotated_image,
+                            brect,
+                            0.9999,
+                            "yes",
+                        )
+                        # print(self.results.gestures)
+                        
+                    cv2.imshow('Show', annotated_image)
+                else:
+                    cv2.imshow('Show', frame)
+                
+                if cv2.waitKey(5) & 0xFF == ord('q'):
+                    print("Closing Camera Stream")
+                    break
+                        
+            capture.release()
+            cv2.destroyAllWindows()
+
+
+
+if __name__ == "__main__":
+    body_module = Mediapipe_HandModule()
+    body_module.main()
