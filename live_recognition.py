@@ -9,8 +9,8 @@ from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 
 LANDMARKER_MODEL_PATH = 'models/hand_landmarker.task'
-CLASSIFIER_MODEL_PATH1 = 'models/keypoint_classifier_part1 copy.tflite'
-CLASSIFIER_MODEL_PATH2 = 'models/keypoint_classifier_part2 copy.tflite'
+CLASSIFIER_MODEL_PATH1 = 'models/keypoint_classifier_part1.tflite'
+CLASSIFIER_MODEL_PATH2 = 'models/keypoint_classifier_part2.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 
 BaseOptions = mp.tasks.BaseOptions
