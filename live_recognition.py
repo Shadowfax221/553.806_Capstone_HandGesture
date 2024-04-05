@@ -27,16 +27,16 @@ class Mediapipe_HandModule():
         self.results = None
 
 
-    def pre_process_landmark(self, landmarks):
+    def pre_process_landmark(self, hand_landmarks):
         landmark_list = []
-        # Convert to relative coordinates
-        # for idx, landmark in enumerate(landmarks):
+        # # Convert to relative coordinates
+        # for idx, landmark in enumerate(hand_landmarks):
         #     if idx == 0:
-        #         base_x, base_y, base_z = landmark.x, landmark.y, landmark.z
-        #     landmark_list.extend([landmark.x-base_x, landmark.y-base_y, landmark.z-base_z])
+        #         base_x, base_y = landmark.x, landmark.y
+        #     landmark_list.extend([landmark.x-base_x, landmark.y-base_y, landmark.z])
         # # Normalization
         # landmark_list = landmark_list / np.max(np.abs(landmark_list))
-        for landmark in landmarks:
+        for landmark in hand_landmarks:
             landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
         landmark_list = np.array([landmark_list]).astype(np.float32)
         return landmark_list
