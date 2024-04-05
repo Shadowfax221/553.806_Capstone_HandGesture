@@ -9,8 +9,8 @@ from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
 
 LANDMARKER_MODEL_PATH = 'models/hand_landmarker.task'
-CLASSIFIER_MODEL_PATH1 = 'models/keypoint_classifier_part1 copy.tflite'
-CLASSIFIER_MODEL_PATH2 = 'models/keypoint_classifier_part2 copy.tflite'
+CLASSIFIER_MODEL_PATH1 = 'models/keypoint_classifier_part1.tflite'
+CLASSIFIER_MODEL_PATH2 = 'models/keypoint_classifier_part2.tflite'
 LABELS = ['call', 'dislike', 'fist', 'like', 'mute', 'ok', 'one', 'palm', 'peace', 'rock', 'stop', 'stop_inverted']
 
 BaseOptions = mp.tasks.BaseOptions
@@ -27,16 +27,16 @@ class Mediapipe_HandModule():
         self.results = None
 
 
-    def pre_process_landmark(self, landmarks):
+    def pre_process_landmark(self, hand_landmarks):
         landmark_list = []
-        # Convert to relative coordinates
-        # for idx, landmark in enumerate(landmarks):
+        # # Convert to relative coordinates
+        # for idx, landmark in enumerate(hand_landmarks):
         #     if idx == 0:
-        #         base_x, base_y, base_z = landmark.x, landmark.y, landmark.z
-        #     landmark_list.extend([landmark.x-base_x, landmark.y-base_y, landmark.z-base_z])
+        #         base_x, base_y = landmark.x, landmark.y
+        #     landmark_list.extend([landmark.x-base_x, landmark.y-base_y, landmark.z])
         # # Normalization
         # landmark_list = landmark_list / np.max(np.abs(landmark_list))
-        for landmark in landmarks:
+        for landmark in hand_landmarks:
             landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
         landmark_list = np.array([landmark_list]).astype(np.float32)
         return landmark_list
