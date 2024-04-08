@@ -39,6 +39,8 @@ class Mediapipe_HandModule():
         for landmark in hand_landmarks:
             landmark_list.extend([landmark.x, landmark.y, landmark.z]) 
         landmark_list = np.array([landmark_list]).astype(np.float32)
+        if len(landmark_list) > 2:
+            landmark_list[2] = 0
         return landmark_list
     
 
